@@ -54,3 +54,24 @@ Ao final, deve ser possível **adicionar um novo perfil de usuário** criando ap
 ## Padrão de entrega
 
 Conforme a ficha de atividade prática: identificadores em português, código formatado, entrega no repositório Git com README e commits descritivos. O uso de IA para gerar o código é proibido nesta atividade (ver seção 5.3 da ficha).
+## Relatório de Refatoração — Padrões Factory
+
+### 1. Diagnóstico do Problema Inicial
+No código original, a classe `GerenciadorLogin` utilizava estruturas condicionais (`if/else`) com instanciações diretas (`new`) de classes concretas de painel (`PainelAluno`, `PainelProfessor`, etc.). Isso violava o Princípio Aberto/Fechado (OCP), pois a introdução de qualquer novo perfil exigia modificar uma classe existente e já testada, além de acoplá-la a todas as implementações concretas de produto.
+
+### 2. Refatoração 1: Simple Factory
+- **Abordagem:** Foi criada a classe `FabricaPainel` com o método `criar(String tipo)`.
+- **Efeito:** O `GerenciadorLogin` deixou de instanciar produtos concretos diretamente, delegando a responsabilidade de criação para a fábrica. No entanto, a fábrica em si ainda continha a condicional, sendo apenas um ponto centralizador de instanciação.
+
+### 3. Refatoração 2: Factory Method
+- **Abordagem:** Implementou-se o padrão Factory Method formal. Foi criada a classe base abstrata `CriadorPainel`, que define o método abstrato `criarPainel()` e o método de operação `montar()`. Para cada perfil, foi criada uma subclasse especializada (`CriadorPainelAluno`, `CriadorPainelProfessor`, `CriadorPainelCoordenador`).
+- **Efeito:** A criação dos painéis passou a ser resolvida por polimorfismo, eliminando totalmente a cadeia de `if/else`.
+
+### 4. Prova do OCP (Adição do Perfil Secretaria)
+Para comprovar que o sistema está aberto para extensão e fechado para modificação:
+- Foram criadas exclusivamente duas novas classes: `PainelSecretaria` (novo produto) e `CriadorPainelSecretaria` (novo criador concreto).
+- Nenhuma classe pré-existente (`CriadorPainel`, `GerenciadorLogin` ou os outros criadores) precisou de ser alterada para acomodar o novo perfil.
+
+---
+
+### Diagrama de Classes Simplificado (Solução Final)
