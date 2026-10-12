@@ -27,5 +27,27 @@ public class Main {
         System.out.println("é encapsular a criação (Simple Factory) e depois delegá-la");
         System.out.println("às subclasses (Factory Method), tornando o código aberto para");
         System.out.println("extensão sem modificação.");
+        package siga;
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("=== SIGA — Padrão Factory Method ===");
+
+        // Criadores polimórficos
+        CriadorPainel criadorAluno = new CriadorPainelAluno();
+        criadorAluno.montar();
+
+        CriadorPainel criadorProfessor = new CriadorPainelProfessor();
+        criadorProfessor.montar();
+
+        CriadorPainel criadorCoordenador = new CriadorPainelCoordenador();
+        criadorCoordenador.montar();
+
+        // Demonstração do OCP: novo perfil adicionado sem alterar classes existentes
+        System.out.println("\n--- Demonstração do OCP (Novo Perfil) ---");
+        CriadorPainel criadorSecretaria = new CriadorPainelSecretaria();
+        criadorSecretaria.montar();
+    }
+}
     }
 }
